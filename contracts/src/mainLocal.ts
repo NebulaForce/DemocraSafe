@@ -80,7 +80,7 @@ async function performVote() {
   } catch (ex: any) {
     console.error('Vote failed:', ex.message);
   }
-  console.log('After transaction2: Attempted double voting');
+
 }
 
 /**
@@ -88,8 +88,10 @@ async function performVote() {
  */
 async function main() {
   await deployZkApp();
+  console.log(candidates)
+  console.log(voters)
   await performVote();
-  console.log('Shutting down');
+  console.log("---End Game---")
 }
 
 await main();
