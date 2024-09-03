@@ -1,4 +1,3 @@
-/*import { Votes } from './Votes.js';
+import { VotationContract } from "./votationContract";
 
-export { Votes };
-*/
+export { VotationContract };
