@@ -13,3 +13,9 @@
     color: var(--theme-blue-01);
     margin-bottom: 1rem;
 }
+
+.form {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+}
