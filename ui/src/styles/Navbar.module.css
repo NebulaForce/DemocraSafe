@@ -1,0 +1,41 @@
+.navbar {
+    background-color: #204a87;
+    padding: 15px 0;
+    color: white;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .navbarContent {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .navbarBox {
+    background-color: #6f7980;
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .navItems {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 20px;
+  }
+  
+  .navItem a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .navItem a:hover {
+    text-decoration: underline;
+  }
+  

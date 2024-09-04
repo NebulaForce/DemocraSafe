@@ -1,0 +1,32 @@
+.mainContent {
+  padding: 20px;
+}
+
+.columnsContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.column {
+  padding: 20px;
+  border-radius: 8px;
+  color: #fff;
+}
+
+.column1 {
+  background-color: #6f7980;
+  width: 20%; 
+}
+
+.column2 {
+  background-color: #204a87;
+  width: 80%; 
+}
+
+.column h2 {
+  margin-top: 0;
+}
+
+.column p {
+  margin-bottom: 0;
+}
