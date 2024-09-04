@@ -28,6 +28,18 @@
   --font-monument-bold: 'ABC Monument Grotesk Bold', sans-serif;
   --font-monument-light: 'ABC Monument Grotesk Light', sans-serif;
   --foreground-rgb: 0, 0, 0;
+
+  --theme-blue-01: #244c84;
+  --theme-blue-02: #476792;
+  --theme-light-blue-01: #339cd2;
+  --theme-light-blue-02: #70b7dd;
+  --theme-light-blue-03: #d2e9f9;
+  --theme-light-blue-03-rgb: 210,233,249;
+  --theme-gray-01: #666c74;
+  --theme-gray-02: #6c7c84;
+  --theme-gray-03: #949494;
+  --theme-black: #040404;
+  --theme-white: #f5f5f5;
 }
 
 * {
