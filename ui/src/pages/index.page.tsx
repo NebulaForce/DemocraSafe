@@ -29,6 +29,10 @@ export default function Home() {
         <title>DemocraSafe</title>
         <meta name="description" content="The cutting-edge zkApp designed to revolutionize how we vote." />
         <link rel="icon" href="/assets/favicon.ico" />
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+        />
       </Head>
     </>
   );
