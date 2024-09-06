@@ -46,17 +46,15 @@ async function deployZkApp() {
  * Creates a new candidate inside a Mina transaction, adds them to the MerkleMap, and initializes their vote count.
  * @returns {Object} An object containing the candidate's private and public keys.
  */
-async function createCandidate() {
-  const candidatePrivateKey = PrivateKey.random();
+async function createCandidate(candidatePrivateKey:PrivateKey) {
+
   const candidatePublicKey = candidatePrivateKey.toPublicKey();
 
   const ckey = Field(Poseidon.hash(candidatePublicKey.toFields()));
 
   // Create a transaction to add the candidate to the zkApp state
   const transaction = await Mina.transaction(senderAccount, () => {
-    // Add candidate to the Merkle Map with 0 votes
     candidates.set(ckey, Field(0));
-    // Update zkApp state with the new candidates Merkle root
     zkAppInstance.candidates.set(candidates.getRoot());
   });
 
@@ -95,16 +93,7 @@ async function performVote(voterPrivateKey: PrivateKey, candidatePrivateKey: Pri
   const candidateVoteCount = candidates.get(ckey);
   candidates.set(ckey, candidateVoteCount.add(Field(1)));
 
-  // Attempt a second vote by the same voter (this should fail)
-  try {
-    const transaction2 = await Mina.transaction(senderAccount, () => {
-      zkAppInstance.vote(voterWitness, candidateWitness, Field(1), voterPublic, candidatePublic);
-    });
-    await transaction2.prove();
-    await transaction2.sign([senderKey]).send();
-  } catch (ex: any) {
-    console.error('Vote failed:', ex.message);
-  }
+
 }
 
 /**
@@ -112,9 +101,9 @@ async function performVote(voterPrivateKey: PrivateKey, candidatePrivateKey: Pri
  */
 async function main() {
   await deployZkApp();
-
+  const candidatePrivateKeyRandom = PrivateKey.random();
   // Create a new candidate within a transaction
-  const { candidatePrivateKey } = await createCandidate();
+  const { candidatePrivateKey } = await createCandidate(candidatePrivateKeyRandom);
 
   // Define custom voter private key
   const voterPrivateKey = PrivateKey.random();
