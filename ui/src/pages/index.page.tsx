@@ -1,4 +1,3 @@
-
 import Head from 'next/head';
 import Image from 'next/image';
 import { useEffect } from 'react';
@@ -6,24 +5,74 @@ import GradientBG from '../components/GradientBG.js';
 import styles from '../styles/Home.module.css';
 import heroMinaLogo from '../../public/assets/hero-mina-logo.svg';
 import arrowRightSmall from '../../public/assets/arrow-right-small.svg';
+import { AccountUpdate, Field, MerkleMap, Poseidon, PrivateKey } from 'o1js';
 
 export default function Home() {
   useEffect(() => {
     (async () => {
       const { Mina, PublicKey } = await import('o1js');
-      const { Add } = await import('../../../contracts/build/src/');
+      const { Votes } = await import('../../../contracts/build/src/');
+      try {
+        // Inicializar la instancia de la cadena de bloques Mina
+        const Local = Mina.LocalBlockchain({ proofsEnabled: false });
+        Mina.setActiveInstance(Local);
+        const { privateKey: deployerKey, publicKey: deployerAccount } = Local.testAccounts[0];
+        const { privateKey: senderKey, publicKey: senderAccount } = Local.testAccounts[1];
 
-      // Update this to use the address (public key) for your zkApp account.
-      // To try it out, you can try this address for an example "Add" smart contract that we've deployed to
-      // Testnet B62qkwohsqTBPsvhYE8cPZSpzJMgoKn4i1LQRuBAtVXWpaT4dgH6WoA.
-      const zkAppAddress = '';
-      // This should be removed once the zkAppAddress is updated.
-      if (!zkAppAddress) {
-        console.error(
-          'The following error is caused because the zkAppAddress has an empty string as the public key. Update the zkAppAddress with the public key for your zkApp account, or try this address for an example "Add" smart contract that we deployed to Testnet: B62qkwohsqTBPsvhYE8cPZSpzJMgoKn4i1LQRuBAtVXWpaT4dgH6WoA'
-        );
+        // Generar claves para zkApp
+        const zkAppPrivateKey = PrivateKey.random();
+        const zkAppAddress = zkAppPrivateKey.toPublicKey();
+        const zkAppInstance = new Votes(zkAppAddress);
+
+        // Inicializar Merkle Maps para votantes y candidatos
+        const voters = new MerkleMap();
+        const candidates = new MerkleMap();
+
+        // Desplegar el zkApp
+        const deployTransaction = await Mina.transaction(deployerAccount, () => {
+          AccountUpdate.fundNewAccount(deployerAccount);
+          zkAppInstance.deploy();
+          zkAppInstance.initState(candidates.getRoot(), voters.getRoot());
+        });
+        await deployTransaction.prove();
+        await deployTransaction.sign([deployerKey, zkAppPrivateKey]).send();
+
+        console.log('zkApp desplegado e inicializado');
+
+        // Crear un nuevo candidato
+        const candidatePrivateKey = PrivateKey.random();
+        const candidatePublicKey = candidatePrivateKey.toPublicKey();
+        const ckey = Field(Poseidon.hash(candidatePublicKey.toFields()));
+
+        const createCandidateTransaction = await Mina.transaction(senderAccount, () => {
+          candidates.set(ckey, Field(0));
+          zkAppInstance.candidates.set(candidates.getRoot());
+        });
+        await createCandidateTransaction.prove();
+        await createCandidateTransaction.sign([senderKey]).send();
+
+        console.log('Candidato creado y añadido al estado');
+
+        // Realizar una votación
+        const voterPrivateKey = PrivateKey.random();
+        const voterPublicKey = voterPrivateKey.toPublicKey();
+        const vkey = Field(Poseidon.hash(voterPublicKey.toFields()));
+        const candidateWitness = candidates.getWitness(ckey);
+        const voterWitness = voters.getWitness(vkey);
+
+        const voteTransaction = await Mina.transaction(senderAccount, () => {
+          zkAppInstance.vote(voterWitness, candidateWitness, Field(0), voterPublicKey, candidatePublicKey);
+        });
+        await voteTransaction.prove();
+        await voteTransaction.sign([senderKey]).send();
+
+        console.log('Voto registrado exitosamente');
+      } catch (error) {
+        console.error('Error interactuando con zkApp:', error);
+        console.log('Ocurrió un error');
       }
-      //const zkApp = new Add(PublicKey.fromBase58(zkAppAddress))
+
+
     })();
   }, []);
 

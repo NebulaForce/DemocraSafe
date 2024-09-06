@@ -1,3 +1,3 @@
-import { VotationContract } from "./votationContract";
+import { Votes } from "./HandleVotes";
 
-export { VotationContract };
+export {Votes };
