@@ -1,74 +1,37 @@
-import Head from 'next/head';
-import Image from 'next/image';
-import { useEffect } from 'react';
-import GradientBG from '../components/GradientBG.js';
-import styles from '../styles/Home.module.css';
-import heroMinaLogo from '../../public/assets/hero-mina-logo.svg';
-import arrowRightSmall from '../../public/assets/arrow-right-small.svg';
-import { AccountUpdate, Field, MerkleMap, Poseidon, PrivateKey } from 'o1js';
+import Head from "next/head";
+import Image from "next/image";
+import { useEffect } from "react";
+import GradientBG from "../components/GradientBG.js";
+import styles from "../styles/Home.module.css";
+import heroMinaLogo from "../../public/assets/hero-mina-logo.svg";
+import arrowRightSmall from "../../public/assets/arrow-right-small.svg";
+
+import { PrivateKey } from "o1js";
+import ZkAppService from "./service/contract.service";
 
 export default function Home() {
   useEffect(() => {
     (async () => {
-      const { Mina } = await import('o1js');
-      const { Votes } = await import('../../../contracts/build/src/');
+      const zkAppService = new ZkAppService();
       try {
-        const Local = Mina.LocalBlockchain({ proofsEnabled: false });
-        Mina.setActiveInstance(Local);
-        const { privateKey: deployerKey, publicKey: deployerAccount } = Local.testAccounts[0];
-        const { privateKey: senderKey, publicKey: senderAccount } = Local.testAccounts[1];
+        await zkAppService.initialize(); //important init the service
 
-        // Generate keys for zkApp
-        const zkAppPrivateKey = PrivateKey.random();
-        const zkAppAddress = zkAppPrivateKey.toPublicKey();
-        const zkAppInstance = new Votes(zkAppAddress);
+        const candidatePublicKey = PrivateKey.random().toPublicKey();//fake key
+        console.log("candidatePublicKey", candidatePublicKey);
 
-        // Initialize Merkle Maps for voters and candidates
-        const voters = new MerkleMap();
-        const candidates = new MerkleMap();
+        await zkAppService.createCandidate(candidatePublicKey, "Test");
+        console.log("candidates", zkAppService.getAllCandidates());//get all candidates
 
-        // Deploy the zkApp
-        const deployTransaction = await Mina.transaction(deployerAccount, () => {
-          AccountUpdate.fundNewAccount(deployerAccount);
-          zkAppInstance.deploy();
-          zkAppInstance.initState(candidates.getRoot(), voters.getRoot());
-        });
-        await deployTransaction.prove();
-        await deployTransaction.sign([deployerKey, zkAppPrivateKey]).send();
+        await zkAppService.castVote(
+          PrivateKey.random().toPublicKey(),//your wallert public key
+          candidatePublicKey
+        );//send a vote
 
-        console.log('zkApp deployed and initialized');
+        console.log("winner", zkAppService.getWinner()); //print the winners
 
-        // Create a new candidate
-        const candidatePrivateKey = PrivateKey.random();
-        const candidatePublicKey = candidatePrivateKey.toPublicKey();
-        const ckey = Field(Poseidon.hash(candidatePublicKey.toFields()));
-
-        const createCandidateTransaction = await Mina.transaction(senderAccount, () => {
-          candidates.set(ckey, Field(0));
-          zkAppInstance.candidates.set(candidates.getRoot());
-        });
-        await createCandidateTransaction.prove();
-        await createCandidateTransaction.sign([senderKey]).send();
-
-        console.log('Candidate created and added to state');
-
-        // Cast a vote
-        const voterPrivateKey = PrivateKey.random();
-        const voterPublicKey = voterPrivateKey.toPublicKey();
-        const vkey = Field(Poseidon.hash(voterPublicKey.toFields()));
-        const candidateWitness = candidates.getWitness(ckey);
-        const voterWitness = voters.getWitness(vkey);
-
-        const voteTransaction = await Mina.transaction(senderAccount, () => {
-          zkAppInstance.vote(voterWitness, candidateWitness, Field(0), voterPublicKey, candidatePublicKey);
-        });
-        await voteTransaction.prove();
-        await voteTransaction.sign([senderKey]).send();
-
-        console.log('Vote recorded successfully');
       } catch (error) {
-        console.error('Error interacting with zkApp:', error);
-        console.log('An error occurred');
+        console.error("Error interacting with zkApp:", error);
+        console.log("An error occurred");
       }
     })();
   }, []);
@@ -104,7 +67,8 @@ export default function Home() {
           </div>
           <p className={styles.start}>
             Get started by editing
-            <code className={styles.code}> src/pages/index.js</code> or <code className={styles.code}> src/pages/index.tsx</code>
+            <code className={styles.code}> src/pages/index.js</code> or{" "}
+            <code className={styles.code}> src/pages/index.tsx</code>
           </p>
           <div className={styles.grid}>
             <a
