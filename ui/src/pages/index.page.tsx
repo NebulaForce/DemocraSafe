@@ -10,8 +10,8 @@ import arrowRightSmall from '../../public/assets/arrow-right-small.svg';
 export default function Home() {
   useEffect(() => {
     (async () => {
-      const { Mina, PublicKey } = await import('o1js');
-      const { Add } = await import('../../../contracts/build/src/');
+     // const { Mina, PublicKey } = await import('o1js');
+     // const { Add } = await import('../../../contracts/build/src/');
 
       // Update this to use the address (public key) for your zkApp account.
       // To try it out, you can try this address for an example "Add" smart contract that we've deployed to

@@ -1,0 +1,67 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.mainContent {
+  flex: 1;
+  padding: 5rem 0;
+}
+
+.contentWrapper {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  max-width: 1200px; 
+  margin: 0 auto; 
+}
+
+.leftMargin, .rightMargin {
+  width: 50px;
+  background-color: #6f7980;
+}
+
+.columnsContainer {
+  display: flex;
+  flex: 1;
+  gap: 20px;
+  box-sizing: border-box;
+}
+
+.column {
+  padding: 10px;
+}
+
+.column1 {
+  flex: 1;
+}
+
+.column2 {
+  flex: 2;
+}
+
+.column h2 {
+  margin-top: 0;
+}
+
+.column p {
+  margin-bottom: 0;
+}
+
+.customImage {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.modalFooter {
+  display: flex;
+  justify-content: center;
+  gap: 10px; 
+}
+
+
+
+

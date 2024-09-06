@@ -1,0 +1,59 @@
+/* Navbar.module.css */
+.navbar {
+  background-color: #204a87;
+  padding: 15px 0;
+  color: white;
+  display: flex;
+  justify-content: center;
+}
+
+.navbarContent {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.leftSection {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 40px; 
+  width: auto;
+  margin-right: 10px;
+}
+
+.logoText {
+  font-size: 1.5rem; 
+  margin: 0;
+}
+
+.rightSection {
+  display: flex;
+  align-items: center;
+}
+
+.socialIcons {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 15px;
+}
+
+.socialIcons li {
+  margin: 0;
+}
+
+.socialIcons a {
+  color: white;
+  text-decoration: none;
+  font-size: 20px;
+}
+
+.socialIcons a:hover {
+  color: #ddd;
+}
