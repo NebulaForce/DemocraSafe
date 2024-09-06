@@ -12,9 +12,11 @@ import ZkAppService from "./service/contract.service";
 export default function Home() {
   useEffect(() => {
     (async () => {
+
       const zkAppService = new ZkAppService();
       try {
         await zkAppService.initialize(); //important init the service
+
 
         const candidatePublicKey = PrivateKey.random().toPublicKey();//fake key
         console.log("candidatePublicKey", candidatePublicKey);
