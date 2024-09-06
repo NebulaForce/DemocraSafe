@@ -10,25 +10,24 @@ import { AccountUpdate, Field, MerkleMap, Poseidon, PrivateKey } from 'o1js';
 export default function Home() {
   useEffect(() => {
     (async () => {
-      const { Mina, PublicKey } = await import('o1js');
+      const { Mina } = await import('o1js');
       const { Votes } = await import('../../../contracts/build/src/');
       try {
-        // Inicializar la instancia de la cadena de bloques Mina
         const Local = Mina.LocalBlockchain({ proofsEnabled: false });
         Mina.setActiveInstance(Local);
         const { privateKey: deployerKey, publicKey: deployerAccount } = Local.testAccounts[0];
         const { privateKey: senderKey, publicKey: senderAccount } = Local.testAccounts[1];
 
-        // Generar claves para zkApp
+        // Generate keys for zkApp
         const zkAppPrivateKey = PrivateKey.random();
         const zkAppAddress = zkAppPrivateKey.toPublicKey();
         const zkAppInstance = new Votes(zkAppAddress);
 
-        // Inicializar Merkle Maps para votantes y candidatos
+        // Initialize Merkle Maps for voters and candidates
         const voters = new MerkleMap();
         const candidates = new MerkleMap();
 
-        // Desplegar el zkApp
+        // Deploy the zkApp
         const deployTransaction = await Mina.transaction(deployerAccount, () => {
           AccountUpdate.fundNewAccount(deployerAccount);
           zkAppInstance.deploy();
@@ -37,9 +36,9 @@ export default function Home() {
         await deployTransaction.prove();
         await deployTransaction.sign([deployerKey, zkAppPrivateKey]).send();
 
-        console.log('zkApp desplegado e inicializado');
+        console.log('zkApp deployed and initialized');
 
-        // Crear un nuevo candidato
+        // Create a new candidate
         const candidatePrivateKey = PrivateKey.random();
         const candidatePublicKey = candidatePrivateKey.toPublicKey();
         const ckey = Field(Poseidon.hash(candidatePublicKey.toFields()));
@@ -51,9 +50,9 @@ export default function Home() {
         await createCandidateTransaction.prove();
         await createCandidateTransaction.sign([senderKey]).send();
 
-        console.log('Candidato creado y añadido al estado');
+        console.log('Candidate created and added to state');
 
-        // Realizar una votación
+        // Cast a vote
         const voterPrivateKey = PrivateKey.random();
         const voterPublicKey = voterPrivateKey.toPublicKey();
         const vkey = Field(Poseidon.hash(voterPublicKey.toFields()));
@@ -66,13 +65,11 @@ export default function Home() {
         await voteTransaction.prove();
         await voteTransaction.sign([senderKey]).send();
 
-        console.log('Voto registrado exitosamente');
+        console.log('Vote recorded successfully');
       } catch (error) {
-        console.error('Error interactuando con zkApp:', error);
-        console.log('Ocurrió un error');
+        console.error('Error interacting with zkApp:', error);
+        console.log('An error occurred');
       }
-
-
     })();
   }, []);
 
@@ -121,7 +118,7 @@ export default function Home() {
                 <div>
                   <Image
                     src={arrowRightSmall}
-                    alt="Mina Logo"
+                    alt="Arrow pointing right"
                     width={16}
                     height={16}
                     priority
@@ -141,7 +138,7 @@ export default function Home() {
                 <div>
                   <Image
                     src={arrowRightSmall}
-                    alt="Mina Logo"
+                    alt="Arrow pointing right"
                     width={16}
                     height={16}
                     priority
@@ -161,7 +158,7 @@ export default function Home() {
                 <div>
                   <Image
                     src={arrowRightSmall}
-                    alt="Mina Logo"
+                    alt="Arrow pointing right"
                     width={16}
                     height={16}
                     priority
@@ -181,7 +178,7 @@ export default function Home() {
                 <div>
                   <Image
                     src={arrowRightSmall}
-                    alt="Mina Logo"
+                    alt="Arrow pointing right"
                     width={16}
                     height={16}
                     priority
