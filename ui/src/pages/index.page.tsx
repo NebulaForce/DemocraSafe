@@ -19,11 +19,11 @@ export default function Home() {
         const candidatePublicKey = PrivateKey.random().toPublicKey();//fake key
         console.log("candidatePublicKey", candidatePublicKey);
 
-        await zkAppService.createCandidate(candidatePublicKey, "Test");
+        await zkAppService.createCandidate(candidatePublicKey, "Test");// save candidate
         console.log("candidates", zkAppService.getAllCandidates());//get all candidates
 
         await zkAppService.castVote(
-          PrivateKey.random().toPublicKey(),//your wallert public key
+          PrivateKey.random().toPublicKey(),//your wallet public key
           candidatePublicKey
         );//send a vote
 
