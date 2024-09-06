@@ -11,6 +11,7 @@
     "deploy": "next build --no-lint && touch out/.nojekyll && node ./ghp-postbuild && git add -f out && git commit -m \"Deploy gh-pages\" && cd .. && git subtree push --prefix ui/out origin gh-pages"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.6.0",
     "bootstrap": "^5.3.3",
     "coi-serviceworker": "^0.1.7",
     "next": "14.2.3",
