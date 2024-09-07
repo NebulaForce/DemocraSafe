@@ -1,25 +1,35 @@
+import Head from "next/head";
+import { useEffect } from "react";
 
-import Head from 'next/head';
-import { useEffect } from 'react';
-import styles from '../styles/Home.module.css';
+import { PrivateKey } from "o1js";
+import ZkAppService from "./service/contract.service";
 
 export default function Home() {
   useEffect(() => {
     (async () => {
-     // const { Mina, PublicKey } = await import('o1js');
-     // const { Add } = await import('../../../contracts/build/src/');
 
-      // Update this to use the address (public key) for your zkApp account.
-      // To try it out, you can try this address for an example "Add" smart contract that we've deployed to
-      // Testnet B62qkwohsqTBPsvhYE8cPZSpzJMgoKn4i1LQRuBAtVXWpaT4dgH6WoA.
-      const zkAppAddress = '';
-      // This should be removed once the zkAppAddress is updated.
-      if (!zkAppAddress) {
-        console.error(
-          'The following error is caused because the zkAppAddress has an empty string as the public key. Update the zkAppAddress with the public key for your zkApp account, or try this address for an example "Add" smart contract that we deployed to Testnet: B62qkwohsqTBPsvhYE8cPZSpzJMgoKn4i1LQRuBAtVXWpaT4dgH6WoA'
-        );
+      const zkAppService = new ZkAppService();
+      try {
+        await zkAppService.initialize(); //important init the service
+
+
+        const candidatePublicKey = PrivateKey.random().toPublicKey();//fake key
+        console.log("candidatePublicKey", candidatePublicKey);
+
+        await zkAppService.createCandidate(candidatePublicKey, "Test");// save candidate
+        console.log("candidates", zkAppService.getAllCandidates());//get all candidates
+
+        await zkAppService.castVote(
+          PrivateKey.random().toPublicKey(),//your wallet public key
+          candidatePublicKey
+        );//send a vote
+
+        console.log("winner", zkAppService.getWinner()); //print the winners
+
+      } catch (error) {
+        console.error("Error interacting with zkApp:", error);
+        console.log("An error occurred");
       }
-      //const zkApp = new Add(PublicKey.fromBase58(zkAppAddress))
     })();
   }, []);
 
@@ -34,6 +44,7 @@ export default function Home() {
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
         />
       </Head>
+      <></>
     </>
   );
 }
