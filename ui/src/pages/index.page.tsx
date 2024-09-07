@@ -1,41 +1,11 @@
 import Head from "next/head";
-import { useEffect, useState } from "react";
-
-import { PrivateKey } from "o1js";
-import ZkAppService from "./service/contract.service";
+import { useState } from "react";
 import styles from '../styles/Home.module.css';
 
 import { ListGroup, ListGroupItem } from 'reactstrap';
 import { useRouter } from "next/router";
 
 export default function Home() {
-  useEffect(() => {
-    (async () => {
-
-      const zkAppService = new ZkAppService();
-      try {
-        await zkAppService.initialize(); //important init the service
-
-
-        const candidatePublicKey = PrivateKey.random().toPublicKey();//fake key
-        console.log("candidatePublicKey", candidatePublicKey);
-
-        await zkAppService.createCandidate(candidatePublicKey, "Test");// save candidate
-        console.log("candidates", zkAppService.getAllCandidates());//get all candidates
-
-        await zkAppService.castVote(
-          PrivateKey.random().toPublicKey(),//your wallet public key
-          candidatePublicKey
-        );//send a vote
-
-        console.log("winner", zkAppService.getWinner()); //print the winners
-
-      } catch (error) {
-        console.error("Error interacting with zkApp:", error);
-        console.log("An error occurred");
-      }
-    })();
-  }, []);
 
   const router = useRouter();
 
@@ -69,10 +39,10 @@ export default function Home() {
       title: 'How to Vote?',
       content: `
         <div>
-        <p style="text-align: justify;">
-  DemocraSafe is a cutting-edge voting platform designed to ensure that your vote remains completely private and secure. Born out of a hackathon, it uses advanced cryptography to guarantee that no one—not even the system itself—can see how you voted, while still making sure your vote is counted. With a focus on user privacy and election integrity, DemocraSafe makes it easy to participate in elections of all sizes, from local community votes to national elections, knowing that your vote remains confidential and protected at every step.
-  </p>
-  <br>
+          <p style="text-align: justify;">
+            DemocraSafe is a cutting-edge voting platform designed to ensure that your vote remains completely private and secure. Born out of a hackathon, it uses advanced cryptography to guarantee that no one—not even the system itself—can see how you voted, while still making sure your vote is counted. With a focus on user privacy and election integrity, DemocraSafe makes it easy to participate in elections of all sizes, from local community votes to national elections, knowing that your vote remains confidential and protected at every step.
+          </p>
+          <br>
           <p style="text-align: justify;">Follow these instructions:</p>
           <ul>
             <li>1. Check the available candidates</li>
