@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import React, { useState } from 'react';
-import { ListGroup, ListGroupItem, Card, CardHeader, CardBody, CardFooter, CardTitle, CardSubtitle, CardText, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import styles from '../styles/vote.module.css';
+import { Card, CardHeader, CardBody, CardFooter, CardTitle, CardSubtitle, CardText, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import styles from '../../styles/vote.module.css';
 
 type Candidate = {
   indexCandidate: any;
@@ -9,18 +9,12 @@ type Candidate = {
   party: string;
 };
 
-export default function Vote() {
+export default function CastVote() {
   // State to track the selected candidate
   const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null);
   // State for the modal
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
-
-  const closeBtn = (
-    <button className="close" onClick={toggle} type="button">
-      &times;
-    </button>
-  );
 
   // Array with candidate details
   const candidates: Candidate[] = [

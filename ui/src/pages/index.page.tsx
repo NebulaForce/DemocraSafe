@@ -4,6 +4,7 @@ import styles from '../styles/Home.module.css';
 
 import { ListGroup, ListGroupItem } from 'reactstrap';
 import { useRouter } from "next/router";
+import useContractAndWallet from "@/hooks/useContract";
 
 export default function Home() {
 
@@ -55,6 +56,16 @@ export default function Home() {
     }
   };
 
+  const {
+      setup,
+      accountDoesNotExist,
+      hasBeenSetup,
+      accountExists,
+      onSendTransaction,
+      onRefreshCandidates,
+      onCountAllVotes
+    } = useContractAndWallet();
+
   return (
     <>
       <Head>
@@ -85,8 +96,11 @@ export default function Home() {
                     <ListGroupItem tag="button" onClick={() => { router.push('/candidate/register'); }}>
                       Register Candidate
                     </ListGroupItem>
-                    <ListGroupItem tag="button" onClick={() => { router.push('/vote'); }}>
+                    <ListGroupItem tag="button" onClick={() => { router.push('/vote/cast'); }}>
                       Vote
+                    </ListGroupItem>
+                    <ListGroupItem tag="button" onClick={() => { router.push('/vote/count'); }}>
+                      Count Votes
                     </ListGroupItem>
                   </ListGroup>
                 </div>
