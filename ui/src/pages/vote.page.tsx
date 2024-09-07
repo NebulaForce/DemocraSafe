@@ -93,7 +93,6 @@ export default function Vote() {
         <link rel="icon" href="/assets/favicon.ico" />
       </Head>
       <div className={styles.pageContainer}>
-        <Navbar />
         <div className={styles.mainContent}>
           <div className={styles.contentWrapper}>
             <div className={styles.leftMargin}></div>
@@ -152,7 +151,6 @@ export default function Vote() {
             <div className={styles.rightMargin}></div>
           </div>
         </div>
-        <Footer />
       </div>
 
       <Modal isOpen={modal} toggle={toggle}>
