@@ -100,7 +100,7 @@ DemocraSafe is a cutting-edge voting platform designed to ensure that your vote 
             <div className={styles.columnsContainer}>
               {/* Section 1 - List of Options */}
               <div className={`${styles.column} ${styles.column1}`}>
-                <h2>Section 1</h2>
+                <h2>Menu</h2>
                 <ListGroup>
                   <ListGroupItem tag="button" onClick={() => setSelectedOption(1)}>
                     What is DemocraSafe?
