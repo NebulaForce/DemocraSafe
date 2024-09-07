@@ -1,8 +1,8 @@
 /* Navbar.module.css */
 .navbar {
-  background-color: #204a87;
+  background-color: var(--theme-light-blue-02);
   padding: 15px 0;
-  color: white;
+  color: var(--theme-white);
   display: flex;
   justify-content: center;
 }
@@ -21,7 +21,7 @@
 }
 
 .logo {
-  height: 40px; 
+  height: 50px; 
   width: auto;
   margin-right: 10px;
 }

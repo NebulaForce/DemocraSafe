@@ -8,7 +8,7 @@ const Navbar: React.FC = () => {
       <div className={styles.navbarContent}>
         <div className={styles.leftSection}>
           <img src="/assets/democrasafe_logo.png" alt="DemocraSafe Logo" className={styles.logo} />
-          <h1 className={styles.logoText}>DemocraSafe.</h1>
+          <h1 className={styles.logoText}>DemocraSafe</h1>
         </div>
         <div className={styles.rightSection}>
           <ul className={styles.socialIcons}>

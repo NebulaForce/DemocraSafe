@@ -90,7 +90,7 @@ export default function Vote() {
       <Head>
         <title>DemocraSafe</title>
         <meta name="description" content="Vote page layout" />
-        <link rel="icon" href="/assets/democrasafe_logo.png" />
+        <link rel="icon" href="/assets/favicon.ico" />
       </Head>
       <div className={styles.pageContainer}>
         <Navbar />
