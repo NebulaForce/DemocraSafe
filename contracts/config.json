@@ -3,7 +3,7 @@
   "deployAliases": {
     "public": {
       "networkId": "testnet",
-      "url": "https://proxy.berkeley.minaexplorer.com/graphql",
+      "url": "https://api.minascan.io/node/devnet/v1/graphql",
       "keyPath": "keys/public.json",
       "feepayerKeyPath": "/home/m/.cache/zkapp-cli/keys/318.json",
       "feepayerAlias": "318",
