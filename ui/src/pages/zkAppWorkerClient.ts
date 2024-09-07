@@ -41,16 +41,22 @@ export default class ZkappWorkerClient {
     });
   }
 
-  //todo: add functions to interact with the contract
+  vote(candidate: string) {
+    return this._call('vote', {
+      candidate,
+    });
+  }
 
-//   async getNum(): Promise<Field> {
-//     const result = await this._call('getNum', {});
-//     return Field.fromJSON(JSON.parse(result as string));
-//   }
+  countVotes() {
+    return this._call('countVotes', {});
+  }
 
-//   createUpdateTransaction() {
-//     return this._call('createUpdateTransaction', {});
-//   }
+  async getCandidates(): Promise<Field> {
+    const result = await this._call('getCandidates', {});
+    return Field.fromJSON(JSON.parse(result as string));
+  }
+
+  //todo: add other functions (register, etc)
 
   proveUpdateTransaction() {
     return this._call('proveUpdateTransaction', {});

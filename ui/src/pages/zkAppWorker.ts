@@ -40,18 +40,24 @@ const functions = {
     const publicKey = PublicKey.fromBase58(args.publicKey58);
     state.zkapp = new state.Votes!(publicKey);
   },
-  // todo: add functions to interact with the contract
-
-  // getNum: async (args: {}) => {
-  //   const currentNum = await state.zkapp!.num.get();
-  //   return JSON.stringify(currentNum.toJSON());
-  // },
-  // createUpdateTransaction: async (args: {}) => {
-  //   const transaction = await Mina.transaction(async () => {
-  //     await state.zkapp!.update();
-  //   });
-  //   state.transaction = transaction;
-  // },
+  vote: async (args: {candidate: string}) => {
+    const candidate = args.candidate;
+    const transaction = await Mina.transaction(() => {
+      state.zkapp!.vote(PublicKey.fromBase58(candidate)); //todo: fix to include the other arguments
+    });
+    state.transaction = transaction;
+  },
+  countVotes: async (args: {}) => {
+    const transaction = await Mina.transaction(() => {
+      state.zkapp!.countVotes();
+    });
+    state.transaction = transaction;
+  },
+  getCandidates: async (args: {}) => {
+    const result = await state.zkapp!.candidates.getAndAssertEquals();
+    return JSON.stringify(result.toJSON());
+  },
+  // todo: add other functions to interact with the contract (register, etc)
   proveUpdateTransaction: async (args: {}) => {
     await state.transaction!.prove();
   },
