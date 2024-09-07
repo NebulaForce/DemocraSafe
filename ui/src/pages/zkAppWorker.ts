@@ -26,7 +26,7 @@ const functions = {
     Mina.setActiveInstance(Network);
   },
   loadContract: async (args: {}) => {
-    const { Votes } = await import('.././../../contracts/src/HandleVotes');
+    const { Votes } = await import('.././../../contracts/build/src/HandleVotes');
     state.Votes = Votes;
   },
   compileContract: async (args: {}) => {
