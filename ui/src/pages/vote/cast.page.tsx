@@ -2,6 +2,7 @@ import Head from 'next/head';
 import React, { useState } from 'react';
 import { Card, CardHeader, CardBody, CardFooter, CardTitle, CardSubtitle, CardText, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import styles from '../../styles/vote.module.css';
+import { useTransaction } from '@/context/GlobalState';
 
 type Candidate = {
   indexCandidate: any;
@@ -16,6 +17,8 @@ export default function CastVote() {
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
 
+  const { onSendTransaction, onRefreshCandidates } = useTransaction();
+
   // Array with candidate details
   const candidates: Candidate[] = [
     { indexCandidate: 1, name: 'Ada Lovelace', party: 'Progressive Future Party (PFP)' },
@@ -25,6 +28,7 @@ export default function CastVote() {
   const handleVoteClick = (candidate: Candidate) => {
     setSelectedCandidate(candidate);
     toggle();
+    //todo: replace this with the onSendTransaction function from the context
   };
 
   return (
@@ -38,6 +42,7 @@ export default function CastVote() {
         <h1 className={styles.title}>Cast Your Vote</h1>
         <div className={styles.candidatesContainer}>
           {
+            //todo: replace this with the onRefreshCandidates function from the context
             candidates.map((candidate, index) => (
               <Card
                 className="my-2"

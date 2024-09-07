@@ -4,7 +4,7 @@ import styles from '../styles/Home.module.css';
 
 import { ListGroup, ListGroupItem } from 'reactstrap';
 import { useRouter } from "next/router";
-import useContractAndWallet from "@/hooks/useContract";
+import { useTransaction } from "@/context/GlobalState";
 
 export default function Home() {
 
@@ -56,15 +56,7 @@ export default function Home() {
     }
   };
 
-  const {
-      setup,
-      accountDoesNotExist,
-      hasBeenSetup,
-      accountExists,
-      onSendTransaction,
-      onRefreshCandidates,
-      onCountAllVotes
-    } = useContractAndWallet();
+  const { setup, accountDoesNotExist, hasBeenSetup, accountExists } = useTransaction();
 
   return (
     <>
@@ -79,41 +71,46 @@ export default function Home() {
       </Head>
       <>
         <div className={styles.pageContainer}>
-          <div className={styles.mainContent}>
-            <div className={styles.contentWrapper}>
-              <div className={styles.leftMargin}></div>
-              <div className={styles.columnsContainer}>
-                {/* Section 1 - List of Options */}
-                <div className={`${styles.column} ${styles.column1}`}>
-                  <h2>Menu</h2>
-                  <ListGroup>
-                    <ListGroupItem tag="button" onClick={() => setSelectedOption(1)}>
-                      What is DemocraSafe?
-                    </ListGroupItem>
-                    <ListGroupItem tag="button" onClick={() => setSelectedOption(2)}>
-                      How to vote?
-                    </ListGroupItem>
-                    <ListGroupItem tag="button" onClick={() => { router.push('/candidate/register'); }}>
-                      Register Candidate
-                    </ListGroupItem>
-                    <ListGroupItem tag="button" onClick={() => { router.push('/vote/cast'); }}>
-                      Vote
-                    </ListGroupItem>
-                    <ListGroupItem tag="button" onClick={() => { router.push('/vote/count'); }}>
-                      Count Votes
-                    </ListGroupItem>
-                  </ListGroup>
-                </div>
+          {setup}
+          {accountDoesNotExist}
+          {
+            hasBeenSetup && accountExists && (
+              <div className={styles.mainContent}>
+                <div className={styles.contentWrapper}>
+                  <div className={styles.leftMargin}></div>
+                  <div className={styles.columnsContainer}>
+                    {/* Section 1 - List of Options */}
+                    <div className={`${styles.column} ${styles.column1}`}>
+                      <h2>Menu</h2>
+                      <ListGroup>
+                        <ListGroupItem tag="button" onClick={() => setSelectedOption(1)}>
+                          What is DemocraSafe?
+                        </ListGroupItem>
+                        <ListGroupItem tag="button" onClick={() => setSelectedOption(2)}>
+                          How to vote?
+                        </ListGroupItem>
+                        <ListGroupItem tag="button" onClick={() => { router.push('/candidate/register'); }}>
+                          Register Candidate
+                        </ListGroupItem>
+                        <ListGroupItem tag="button" onClick={() => { router.push('/vote/cast'); }}>
+                          Vote
+                        </ListGroupItem>
+                        <ListGroupItem tag="button" onClick={() => { router.push('/vote/count'); }}>
+                          Count Votes
+                        </ListGroupItem>
+                      </ListGroup>
+                    </div>
 
-                {/* Section 2 - Dynamic Content */}
-                <div className={`${styles.column} ${styles.column2}`}>
-                  <h2>{sectionContent[selectedOption].title}</h2>
-                  <div dangerouslySetInnerHTML={{ __html: sectionContent[selectedOption].content }} />
+                    {/* Section 2 - Dynamic Content */}
+                    <div className={`${styles.column} ${styles.column2}`}>
+                      <h2>{sectionContent[selectedOption].title}</h2>
+                      <div dangerouslySetInnerHTML={{ __html: sectionContent[selectedOption].content }} />
+                    </div>
+                  </div>
+                  <div className={styles.rightMargin}></div>
                 </div>
               </div>
-              <div className={styles.rightMargin}></div>
-            </div>
-          </div>
+            )}
         </div>
       </>
     </>
