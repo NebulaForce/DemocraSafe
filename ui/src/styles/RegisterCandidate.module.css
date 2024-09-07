@@ -10,8 +10,7 @@
 .title {
     font-family: var(--font-monument-bold);
     font-size: 2.5rem;
-    color: var(--theme-blue-01);
-    margin-bottom: 1rem;
+    margin: 0 15px; 
 }
 
 .form {
