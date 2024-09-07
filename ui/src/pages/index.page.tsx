@@ -6,6 +6,7 @@ import ZkAppService from "./service/contract.service";
 import styles from '../styles/Home.module.css';
 
 import { ListGroup, ListGroupItem } from 'reactstrap';
+import { useRouter } from "next/router";
 
 export default function Home() {
   useEffect(() => {
@@ -35,6 +36,8 @@ export default function Home() {
       }
     })();
   }, []);
+
+  const router = useRouter();
 
   // State to track the selected option in the menu
   const [selectedOption, setSelectedOption] = useState(1);
@@ -108,6 +111,12 @@ export default function Home() {
                     </ListGroupItem>
                     <ListGroupItem tag="button" onClick={() => setSelectedOption(2)}>
                       How to vote?
+                    </ListGroupItem>
+                    <ListGroupItem tag="button" onClick={() => { router.push('/candidate/register'); }}>
+                      Register Candidate
+                    </ListGroupItem>
+                    <ListGroupItem tag="button" onClick={() => { router.push('/vote'); }}>
+                      Vote
                     </ListGroupItem>
                   </ListGroup>
                 </div>

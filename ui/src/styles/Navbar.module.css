@@ -18,6 +18,7 @@
 .leftSection {
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .logo {

@@ -1,12 +1,15 @@
 import React from 'react';
 import styles from '../styles/Navbar.module.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import { useRouter } from 'next/router';
 
 const Navbar: React.FC = () => {
+  const router = useRouter();
+  
   return (
     <nav className={styles.navbar}>
       <div className={styles.navbarContent}>
-        <div className={styles.leftSection}>
+        <div className={styles.leftSection} onClick={() => {router.push('/');}}>
           <img src="/assets/democrasafe_logo.png" alt="DemocraSafe Logo" className={styles.logo} />
           <h1 className={styles.logoText}>DemocraSafe</h1>
         </div>
