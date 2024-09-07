@@ -33,7 +33,7 @@ export default function Vote() {
     { indexCandidate: 2, name: 'Amelia Earhart', party: 'Unity and Freedom Alliance (UFA)' },
   ];
 
-  const sectionContent = {
+  const sectionContent: { [key: number]: { title: string; content: string } } = {
     1: {
       title: 'What is DemocraSafe?',
       content: `
@@ -61,9 +61,9 @@ export default function Vote() {
       content: `
         <div>
         <p style="text-align: justify;">
-DemocraSafe is a cutting-edge voting platform designed to ensure that your vote remains completely private and secure. Born out of a hackathon, it uses advanced cryptography to guarantee that no one—not even the system itself—can see how you voted, while still making sure your vote is counted. With a focus on user privacy and election integrity, DemocraSafe makes it easy to participate in elections of all sizes, from local community votes to national elections, knowing that your vote remains confidential and protected at every step.
-</p>
-<br>
+  DemocraSafe is a cutting-edge voting platform designed to ensure that your vote remains completely private and secure. Born out of a hackathon, it uses advanced cryptography to guarantee that no one—not even the system itself—can see how you voted, while still making sure your vote is counted. With a focus on user privacy and election integrity, DemocraSafe makes it easy to participate in elections of all sizes, from local community votes to national elections, knowing that your vote remains confidential and protected at every step.
+  </p>
+  <br>
           <p style="text-align: justify;">Follow these instructions:</p>
           <ul>
             <li>1. Check the available candidates</li>
