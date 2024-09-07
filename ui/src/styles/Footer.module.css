@@ -1,0 +1,10 @@
+.footer {
+    background-color: var(--theme-light-blue-02);
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+  } 
+  

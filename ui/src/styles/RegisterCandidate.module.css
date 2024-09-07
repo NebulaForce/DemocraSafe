@@ -1,0 +1,21 @@
+.mainContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: calc(100vh - 140px);
+    background-color: rgba(var(--theme-light-blue-03-rgb), 0.25);
+    padding: 80px;
+}
+
+.title {
+    font-family: var(--font-monument-bold);
+    font-size: 2.5rem;
+    color: var(--theme-blue-01);
+    margin-bottom: 1rem;
+}
+
+.form {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+}

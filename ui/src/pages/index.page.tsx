@@ -1,149 +1,137 @@
+import Head from "next/head";
+import { useEffect, useState } from "react";
 
-import Head from 'next/head';
-import Image from 'next/image';
-import { useEffect } from 'react';
-import GradientBG from '../components/GradientBG.js';
+import { PrivateKey } from "o1js";
+import ZkAppService from "./service/contract.service";
 import styles from '../styles/Home.module.css';
-import heroMinaLogo from '../../public/assets/hero-mina-logo.svg';
-import arrowRightSmall from '../../public/assets/arrow-right-small.svg';
+
+import { ListGroup, ListGroupItem } from 'reactstrap';
+import { useRouter } from "next/router";
 
 export default function Home() {
   useEffect(() => {
     (async () => {
-      const { Mina, PublicKey } = await import('o1js');
-      const { Add } = await import('../../../contracts/build/src/');
 
-      // Update this to use the address (public key) for your zkApp account.
-      // To try it out, you can try this address for an example "Add" smart contract that we've deployed to
-      // Testnet B62qkwohsqTBPsvhYE8cPZSpzJMgoKn4i1LQRuBAtVXWpaT4dgH6WoA.
-      const zkAppAddress = '';
-      // This should be removed once the zkAppAddress is updated.
-      if (!zkAppAddress) {
-        console.error(
-          'The following error is caused because the zkAppAddress has an empty string as the public key. Update the zkAppAddress with the public key for your zkApp account, or try this address for an example "Add" smart contract that we deployed to Testnet: B62qkwohsqTBPsvhYE8cPZSpzJMgoKn4i1LQRuBAtVXWpaT4dgH6WoA'
-        );
+      const zkAppService = new ZkAppService();
+      try {
+        await zkAppService.initialize(); //important init the service
+
+
+        const candidatePublicKey = PrivateKey.random().toPublicKey();//fake key
+        console.log("candidatePublicKey", candidatePublicKey);
+
+        await zkAppService.createCandidate(candidatePublicKey, "Test");// save candidate
+        console.log("candidates", zkAppService.getAllCandidates());//get all candidates
+
+        await zkAppService.castVote(
+          PrivateKey.random().toPublicKey(),//your wallet public key
+          candidatePublicKey
+        );//send a vote
+
+        console.log("winner", zkAppService.getWinner()); //print the winners
+
+      } catch (error) {
+        console.error("Error interacting with zkApp:", error);
+        console.log("An error occurred");
       }
-      //const zkApp = new Add(PublicKey.fromBase58(zkAppAddress))
     })();
   }, []);
+
+  const router = useRouter();
+
+  // State to track the selected option in the menu
+  const [selectedOption, setSelectedOption] = useState(1);
+
+  const sectionContent: { [key: number]: { title: string; content: string } } = {
+    1: {
+      title: 'What is DemocraSafe?',
+      content: `
+        <div align="center">
+          <img alt="DemocraSafe logo" src="./assets/DemocraSafe_logo.png" width="200" />
+          <h1 align="center">DemocraSafe</h1>
+          <p align="center">Your vote. Secure. Private. Auditable. Powered by Zero-Knowledge Proofs</p>
+        </div>
+        <br>
+        <div>
+          <p style="text-align: justify;">
+            Voting on DemocraSafe is designed to be as simple as possible, ensuring anyone can participate with ease. 
+            The platform guarantees that your vote remains private while ensuring it is accurately recorded and counted.
+          </p>
+          <br>
+          <p style="text-align: justify;">
+            Built on the Mina Protocol, DemocraSafe empowers citizens to cast their votes confidently, knowing that their privacy is protected 
+            and the integrity of the election is maintained.
+          </p>
+        </div>
+      `
+    },
+    2: {
+      title: 'How to Vote?',
+      content: `
+        <div>
+        <p style="text-align: justify;">
+  DemocraSafe is a cutting-edge voting platform designed to ensure that your vote remains completely private and secure. Born out of a hackathon, it uses advanced cryptography to guarantee that no one—not even the system itself—can see how you voted, while still making sure your vote is counted. With a focus on user privacy and election integrity, DemocraSafe makes it easy to participate in elections of all sizes, from local community votes to national elections, knowing that your vote remains confidential and protected at every step.
+  </p>
+  <br>
+          <p style="text-align: justify;">Follow these instructions:</p>
+          <ul>
+            <li>1. Check the available candidates</li>
+            <li>2. Click on the "Vote" button</li>
+            <li>3. Confirm your selection</li>
+            <li>4. Sign your election</li>
+          </ul>
+        </div>
+      `
+    }
+  };
 
   return (
     <>
       <Head>
-        <title>Mina zkApp UI</title>
-        <meta name="description" content="built with o1js" />
+        <title>DemocraSafe</title>
+        <meta name="description" content="The cutting-edge zkApp designed to revolutionize how we vote." />
         <link rel="icon" href="/assets/favicon.ico" />
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+        />
       </Head>
-      <GradientBG>
-        <main className={styles.main}>
-          <div className={styles.center}>
-            <a
-              href="https://minaprotocol.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Image
-                className={styles.logo}
-                src={heroMinaLogo}
-                alt="Mina Logo"
-                width="191"
-                height="174"
-                priority
-              />
-            </a>
-            <p className={styles.tagline}>
-              built with
-              <code className={styles.code}> o1js</code>
-            </p>
+      <>
+        <div className={styles.pageContainer}>
+          <div className={styles.mainContent}>
+            <div className={styles.contentWrapper}>
+              <div className={styles.leftMargin}></div>
+              <div className={styles.columnsContainer}>
+                {/* Section 1 - List of Options */}
+                <div className={`${styles.column} ${styles.column1}`}>
+                  <h2>Menu</h2>
+                  <ListGroup>
+                    <ListGroupItem tag="button" onClick={() => setSelectedOption(1)}>
+                      What is DemocraSafe?
+                    </ListGroupItem>
+                    <ListGroupItem tag="button" onClick={() => setSelectedOption(2)}>
+                      How to vote?
+                    </ListGroupItem>
+                    <ListGroupItem tag="button" onClick={() => { router.push('/candidate/register'); }}>
+                      Register Candidate
+                    </ListGroupItem>
+                    <ListGroupItem tag="button" onClick={() => { router.push('/vote'); }}>
+                      Vote
+                    </ListGroupItem>
+                  </ListGroup>
+                </div>
+
+                {/* Section 2 - Dynamic Content */}
+                <div className={`${styles.column} ${styles.column2}`}>
+                  <h2>{sectionContent[selectedOption].title}</h2>
+                  <div dangerouslySetInnerHTML={{ __html: sectionContent[selectedOption].content }} />
+                </div>
+              </div>
+              <div className={styles.rightMargin}></div>
+            </div>
           </div>
-          <p className={styles.start}>
-            Get started by editing
-            <code className={styles.code}> src/pages/index.js</code> or <code className={styles.code}> src/pages/index.tsx</code>
-          </p>
-          <div className={styles.grid}>
-            <a
-              href="https://docs.minaprotocol.com/zkapps"
-              className={styles.card}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <h2>
-                <span>DOCS</span>
-                <div>
-                  <Image
-                    src={arrowRightSmall}
-                    alt="Mina Logo"
-                    width={16}
-                    height={16}
-                    priority
-                  />
-                </div>
-              </h2>
-              <p>Explore zkApps, how to build one, and in-depth references</p>
-            </a>
-            <a
-              href="https://docs.minaprotocol.com/zkapps/tutorials/hello-world"
-              className={styles.card}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <h2>
-                <span>TUTORIALS</span>
-                <div>
-                  <Image
-                    src={arrowRightSmall}
-                    alt="Mina Logo"
-                    width={16}
-                    height={16}
-                    priority
-                  />
-                </div>
-              </h2>
-              <p>Learn with step-by-step o1js tutorials</p>
-            </a>
-            <a
-              href="https://discord.gg/minaprotocol"
-              className={styles.card}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <h2>
-                <span>QUESTIONS</span>
-                <div>
-                  <Image
-                    src={arrowRightSmall}
-                    alt="Mina Logo"
-                    width={16}
-                    height={16}
-                    priority
-                  />
-                </div>
-              </h2>
-              <p>Ask questions on our Discord server</p>
-            </a>
-            <a
-              href="https://docs.minaprotocol.com/zkapps/how-to-deploy-a-zkapp"
-              className={styles.card}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <h2>
-                <span>DEPLOY</span>
-                <div>
-                  <Image
-                    src={arrowRightSmall}
-                    alt="Mina Logo"
-                    width={16}
-                    height={16}
-                    priority
-                  />
-                </div>
-              </h2>
-              <p>Deploy a zkApp to Testnet</p>
-            </a>
-          </div>
-        </main>
-      </GradientBG>
+        </div>
+      </>
     </>
   );
 }
