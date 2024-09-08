@@ -1,41 +1,12 @@
 import Head from "next/head";
-import { useEffect, useState } from "react";
-
-import { PrivateKey } from "o1js";
-import ZkAppService from "./service/contract.service";
+import { useState } from "react";
 import styles from '../styles/Home.module.css';
 
 import { ListGroup, ListGroupItem } from 'reactstrap';
 import { useRouter } from "next/router";
+import { useTransaction } from "@/context/GlobalState";
 
 export default function Home() {
-  useEffect(() => {
-    (async () => {
-
-      const zkAppService = new ZkAppService();
-      try {
-        await zkAppService.initialize(); //important init the service
-
-
-        const candidatePublicKey = PrivateKey.random().toPublicKey();//fake key
-        console.log("candidatePublicKey", candidatePublicKey);
-
-        await zkAppService.createCandidate(candidatePublicKey, "Test");// save candidate
-        console.log("candidates", zkAppService.getAllCandidates());//get all candidates
-
-        await zkAppService.castVote(
-          PrivateKey.random().toPublicKey(),//your wallet public key
-          candidatePublicKey
-        );//send a vote
-
-        console.log("winner", zkAppService.getWinner()); //print the winners
-
-      } catch (error) {
-        console.error("Error interacting with zkApp:", error);
-        console.log("An error occurred");
-      }
-    })();
-  }, []);
 
   const router = useRouter();
 
@@ -69,10 +40,10 @@ export default function Home() {
       title: 'How to Vote?',
       content: `
         <div>
-        <p style="text-align: justify;">
-  DemocraSafe is a cutting-edge voting platform designed to ensure that your vote remains completely private and secure. Born out of a hackathon, it uses advanced cryptography to guarantee that no one—not even the system itself—can see how you voted, while still making sure your vote is counted. With a focus on user privacy and election integrity, DemocraSafe makes it easy to participate in elections of all sizes, from local community votes to national elections, knowing that your vote remains confidential and protected at every step.
-  </p>
-  <br>
+          <p style="text-align: justify;">
+            DemocraSafe is a cutting-edge voting platform designed to ensure that your vote remains completely private and secure. Born out of a hackathon, it uses advanced cryptography to guarantee that no one—not even the system itself—can see how you voted, while still making sure your vote is counted. With a focus on user privacy and election integrity, DemocraSafe makes it easy to participate in elections of all sizes, from local community votes to national elections, knowing that your vote remains confidential and protected at every step.
+          </p>
+          <br>
           <p style="text-align: justify;">Follow these instructions:</p>
           <ul>
             <li>1. Check the available candidates</li>
@@ -84,6 +55,8 @@ export default function Home() {
       `
     }
   };
+
+  const { setup, accountDoesNotExist, hasBeenSetup, accountExists } = useTransaction();
 
   return (
     <>
@@ -98,41 +71,44 @@ export default function Home() {
       </Head>
       <>
         <div className={styles.pageContainer}>
-          <div className={styles.mainContent}>
-            <div className={styles.contentWrapper}>
-              <div className={styles.leftMargin}></div>
-              <div className={styles.columnsContainer}>
-                {/* Section 1 - List of Options */}
-                <div className={`${styles.column} ${styles.column1}`}>
-                  <h2>Menu</h2>
-                  <ListGroup>
-                    <ListGroupItem tag="button" onClick={() => setSelectedOption(1)}>
-                      What is DemocraSafe?
-                    </ListGroupItem>
-                    <ListGroupItem tag="button" onClick={() => setSelectedOption(2)}>
-                      How to vote?
-                    </ListGroupItem>
-                    <ListGroupItem tag="button" onClick={() => { router.push('/candidate/register'); }}>
-                      Register Candidate
-                    </ListGroupItem>
-                    <ListGroupItem tag="button" onClick={() => { router.push('/vote/vote'); }}>
-                      Vote
-                    </ListGroupItem>
-                    <ListGroupItem tag="button" onClick={() => { router.push('/vote/results'); }}>
-                      Live results
-                    </ListGroupItem>
-                  </ListGroup>
-                </div>
-
-                {/* Section 2 - Dynamic Content */}
-                <div className={`${styles.column} ${styles.column2}`}>
-                  <h2>{sectionContent[selectedOption].title}</h2>
-                  <div dangerouslySetInnerHTML={{ __html: sectionContent[selectedOption].content }} />
+          {setup}
+          {accountDoesNotExist}
+          {
+            hasBeenSetup && accountExists && (
+              <div className={styles.mainContent}>
+                <div className={styles.contentWrapper}>
+                  <div className={styles.leftMargin}></div>
+                  <div className={styles.columnsContainer}>
+                    {/* Section 1 - List of Options */}
+                    <div className={`${styles.column} ${styles.column1}`}>
+                      <h2>Menu</h2>
+                      <ListGroup>
+                        <ListGroupItem tag="button" onClick={() => setSelectedOption(1)}>
+                          What is DemocraSafe?
+                        </ListGroupItem>
+                        <ListGroupItem tag="button" onClick={() => setSelectedOption(2)}>
+                          How to vote?
+                        </ListGroupItem>
+                        <ListGroupItem tag="button" onClick={() => { router.push('/candidate/register'); }}>
+                          Register Candidate
+                        </ListGroupItem>
+                        <ListGroupItem tag="button" onClick={() => { router.push('/vote/cast'); }}>
+                          Vote
+                        </ListGroupItem>
+                        <ListGroupItem tag="button" onClick={() => { router.push('/vote/count'); }}>
+                          Count Votes
+                        </ListGroupItem>
+                      </ListGroup>
+                    </div>
+                    <div className={`${styles.column} ${styles.column2}`}>
+                      <h2>{sectionContent[selectedOption].title}</h2>
+                      <div dangerouslySetInnerHTML={{ __html: sectionContent[selectedOption].content }} />
+                    </div>
+                  </div>
+                  <div className={styles.rightMargin}></div>
                 </div>
               </div>
-              <div className={styles.rightMargin}></div>
-            </div>
-          </div>
+            )}
         </div>
       </>
     </>
