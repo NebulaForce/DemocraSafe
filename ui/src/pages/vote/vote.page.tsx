@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import React, { useState } from 'react';
-import { ListGroup, ListGroupItem, Card, CardHeader, CardBody, CardFooter, CardTitle, CardSubtitle, CardText, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import styles from '../styles/vote.module.css';
+import { Card, CardHeader, CardBody, CardFooter, CardTitle, CardSubtitle, CardText, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import styles from '../../styles/vote.module.css';
 
 type Candidate = {
   indexCandidate: any;
@@ -36,12 +36,27 @@ export default function Vote() {
   return (
     <>
       <Head>
-        <title>DemocraSafe</title>
+        <title>Vote</title>
         <meta name="description" content="Vote page layout" />
         <link rel="icon" href="/assets/favicon.ico" />
       </Head>
+      
+      {/* Page container */}
       <div className={styles.pageContainer}>
-        <h1 className={styles.title}>Cast Your Vote</h1>
+        
+        {/* Title with lines */}
+        <div className={styles.titleContainer}>
+          <hr className={styles.grayLine} />
+          <h1 className={styles.title}>Cast Your Vote</h1>
+          <hr className={styles.grayLine} />
+        </div>
+        
+        {/* introText */}
+        <div className={styles.introText}>
+          <p>Welcome to the voting page! Here, you can choose your preferred candidate from the list below. Review the candidates' information and click on the "Vote for [Candidate Name]" button to cast your vote. Your vote is important and will help shape the future. Make sure to select the candidate who aligns best with your values and vision for the future.</p>
+        </div>
+
+        {/* Candidate cards */}
         <div className={styles.candidatesContainer}>
           {
             candidates.map((candidate, index) => (
@@ -73,16 +88,16 @@ export default function Vote() {
         </div>
       </div>
 
+      {/* Modal for vote confirmation */}
       <Modal isOpen={modal} toggle={toggle}>
         <ModalHeader style={{ backgroundColor: '#204a87' }}>
-
           <h5 style={{ color: '#ffffff', margin: 0 }}>Confirm Your Vote</h5>
-
         </ModalHeader>
         <ModalBody>
           {selectedCandidate ?
             (
-              <><h5>Are you sure you want to vote for:</h5>
+              <>
+                <h5>Are you sure you want to vote for:</h5>
 
                 <Card
                   className="my-2"
@@ -114,7 +129,8 @@ export default function Vote() {
                     />
 
                   </CardBody>
-                </Card></>
+                </Card>
+              </>
             ) : (
               <p>Loading candidate details...</p>
             )}

@@ -115,8 +115,11 @@ export default function Home() {
                     <ListGroupItem tag="button" onClick={() => { router.push('/candidate/register'); }}>
                       Register Candidate
                     </ListGroupItem>
-                    <ListGroupItem tag="button" onClick={() => { router.push('/vote'); }}>
+                    <ListGroupItem tag="button" onClick={() => { router.push('/vote/vote'); }}>
                       Vote
+                    </ListGroupItem>
+                    <ListGroupItem tag="button" onClick={() => { router.push('/vote/results'); }}>
+                      Live results
                     </ListGroupItem>
                   </ListGroup>
                 </div>
