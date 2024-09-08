@@ -100,8 +100,6 @@ export default function Home() {
                         </ListGroupItem>
                       </ListGroup>
                     </div>
-
-                    {/* Section 2 - Dynamic Content */}
                     <div className={`${styles.column} ${styles.column2}`}>
                       <h2>{sectionContent[selectedOption].title}</h2>
                       <div dangerouslySetInnerHTML={{ __html: sectionContent[selectedOption].content }} />

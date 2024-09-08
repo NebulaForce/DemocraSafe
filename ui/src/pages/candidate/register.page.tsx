@@ -17,7 +17,7 @@ export default function RegisterCandidate() {
                 />
             </Head>
             <div className={styles.mainContainer}>
-                <h1 className={styles.title}>Add new candidate</h1>
+                <h1>Add new candidate</h1>
                 <Form className={styles.form}>
                     <FormGroup floating>
                         <Input
